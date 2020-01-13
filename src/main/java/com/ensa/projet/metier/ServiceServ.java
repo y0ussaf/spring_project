@@ -15,7 +15,8 @@ public interface ServiceServ {
     Servicee getServiceById(long service_id);
     Page<Servicee> getAllServices(Pageable pageable);
     void deleteService(long service_id);
-    Servicee createOrUpdateService(Servicee servicee) throws NotAllServiceTasksValid;
+    Servicee updateService(Servicee servicee) throws NotAllServiceTasksValid;
+    Servicee createService(Servicee servicee) ;
     void deleteEmployeeFromService(long service_id, long employee_id);
     Servicee addEmployeesToService(long service_id,List<Long> employees);
     boolean isAllServiceTasksValid(long service_id);

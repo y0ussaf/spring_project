@@ -77,8 +77,8 @@ public class ServiceServImpl implements ServiceServ {
     }
 
     @Override
-    public Servicee createOrUpdateService(Servicee servicee) throws NotAllServiceTasksValid {
-        if (servicee.getStatus() !=getServiceById(servicee.getId()).getStatus() && (servicee.getStatus() == Servicee.Status.VALIDE )){
+    public Servicee updateService(Servicee servicee) throws NotAllServiceTasksValid {
+        if ( servicee.getStatus() !=getServiceById(servicee.getId()).getStatus() && (servicee.getStatus() == Servicee.Status.VALIDE )){
             if (isAllServiceTasksValid(servicee.getId())){
                 return serviceDao.save(servicee);
             }else {
@@ -88,6 +88,11 @@ public class ServiceServImpl implements ServiceServ {
             return serviceDao.save(servicee);
         }
 
+    }
+
+    @Override
+    public Servicee createService(Servicee servicee) {
+        return serviceDao.save(servicee);
     }
 
     @Override
