@@ -2,6 +2,7 @@ package com.ensa.projet.controllers;
 
 
 import com.ensa.projet.dao.ServiceDao;
+import com.ensa.projet.metier.NotAllServiceTasksValid;
 import com.ensa.projet.metier.ServiceServ;
 import com.ensa.projet.models.Servicee;
 import com.ensa.projet.models.User;
@@ -68,14 +69,13 @@ public class ServicesController {
 
     @PreAuthorize("hasRole('ROLE_MANAGER')")
     @PostMapping
-    public Servicee createService(@RequestBody Servicee servicee){
+    public Servicee createService(@RequestBody Servicee servicee) throws NotAllServiceTasksValid {
         return serviceServ.createOrUpdateService(servicee);
     }
 
-    @PreAuthorize("hasRole('ROLE_MANAGER') " +
-            "or serviceServImpl.isServiceChef(#service_id,authentication.principal.id) ")
+    @PreAuthorize("hasRole('ROLE_MANAGER') ")
     @PutMapping("{service_id}")
-    public Servicee updateService(@RequestBody Servicee servicee, @PathVariable long service_id){
+    public Servicee updateService(@RequestBody Servicee servicee, @PathVariable long service_id) throws NotAllServiceTasksValid {
         return serviceServ.createOrUpdateService(servicee);
     }
 

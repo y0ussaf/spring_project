@@ -2,6 +2,7 @@ package com.ensa.projet.metier;
 
 import com.ensa.projet.dao.ServiceDao;
 import com.ensa.projet.models.Servicee;
+import com.ensa.projet.models.Task;
 import com.ensa.projet.models.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -61,14 +62,21 @@ public class ServiceServImpl implements ServiceServ {
     }
 
     @Override
-    public Servicee createOrUpdateService(Servicee servicee) {
+    public Servicee createOrUpdateService(Servicee servicee) throws NotAllServiceTasksValid {
+        if (servicee.getStatus() !=getServiceById(servicee.getId()).getStatus() && (servicee.getStatus() == Servicee.Status.VALIDE )){
+            if (isAllServiceTasksValid(servicee.getId())){
+                return serviceDao.save(servicee);
+            }else {
+                throw new  NotAllServiceTasksValid("no valid");
+            }
+        }else {
+            return serviceDao.save(servicee);
+        }
 
-        return serviceDao.save(servicee);
     }
 
     @Override
     public void deleteEmployeeFromService(long service_id, long employee_id) {
-        User employee = userService.getUserById(employee_id);
         getServiceById(service_id).getEmployees().removeIf(user -> user.getId() == employee_id);
     }
 
@@ -80,6 +88,11 @@ public class ServiceServImpl implements ServiceServ {
     }
 
     @Override
+    public boolean isAllServiceTasksValid(long service_id) {
+        return serviceDao.isAllServiceTasksInSameStatus(service_id, Task.Status.VALIDE);
+    }
+
+    @Override
     public Page<Servicee> searchServices(String by, String value, Pageable pageable) {
         return serviceDao.findAllByNameContaining(value,pageable);
     }
@@ -87,8 +100,7 @@ public class ServiceServImpl implements ServiceServ {
     @Override
     public boolean isServiceChef(long service_id, long chef_id)
     {
-        System.out.println("im"+serviceDao.isServiceChef(service_id,chef_id));
-        return true;
+        return serviceDao.isServiceEmployee(service_id,chef_id);
     }
 
     @Override

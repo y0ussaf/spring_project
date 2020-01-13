@@ -23,7 +23,7 @@ public class UsersController {
     @Autowired
     ServiceServ serviceServ;
     @GetMapping(params = {"pageNo","pageSize","sortBy"})
-    @PreAuthorize("hasRole('ROLE_MANAGER')")
+
     public Page<User> getUsers(int pageNo,int pageSize,String sortBy){
         Pageable pageable = PageRequest.of(pageNo,pageSize,Sort.by(sortBy));
         return userService.getAllUsers(pageable);

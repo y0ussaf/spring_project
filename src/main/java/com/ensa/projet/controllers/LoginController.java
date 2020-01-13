@@ -4,6 +4,7 @@ package com.ensa.projet.controllers;
 import com.ensa.projet.metier.UserService;
 import com.ensa.projet.security.JwtAuthenticationResponse;
 import com.ensa.projet.security.JwtTokenProvider;
+import com.ensa.projet.security.UserPrincipal;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -34,9 +35,12 @@ public class LoginController {
                                 loginForm.getUsername(),
                                 loginForm.getPassword())
                 );
+
         SecurityContextHolder.getContext().setAuthentication(authentication);
         String jwt = tokenProvider.generateToken(authentication);
-        return ResponseEntity.ok(new JwtAuthenticationResponse(jwt));
+        JwtAuthenticationResponse jwtAuthenticationResponse = new JwtAuthenticationResponse(jwt);
+        jwtAuthenticationResponse.setUser((UserPrincipal) authentication.getPrincipal());
+        return ResponseEntity.ok(jwtAuthenticationResponse);
     }
 
 }

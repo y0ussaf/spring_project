@@ -15,10 +15,10 @@ public interface ServiceServ {
     Servicee getServiceById(long service_id);
     Page<Servicee> getAllServices(Pageable pageable);
     void deleteService(long service_id);
-    Servicee createOrUpdateService(Servicee servicee);
+    Servicee createOrUpdateService(Servicee servicee) throws NotAllServiceTasksValid;
     void deleteEmployeeFromService(long service_id, long employee_id);
     Servicee addEmployeeToService(long service_id,User employee);
-
+    boolean isAllServiceTasksValid(long service_id);
     Page<Servicee> searchServices(String by, String value, Pageable pageable);
 
 
