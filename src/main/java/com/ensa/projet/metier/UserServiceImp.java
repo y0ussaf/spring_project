@@ -3,11 +3,8 @@ package com.ensa.projet.metier;
 import com.ensa.projet.dao.RoleDao;
 import com.ensa.projet.dao.ServiceDao;
 import com.ensa.projet.dao.UserDao;
-import com.ensa.projet.models.Role;
-import com.ensa.projet.models.Servicee;
 import com.ensa.projet.models.User;
 import com.ensa.projet.security.UserPrincipal;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -17,6 +14,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import javax.persistence.EntityNotFoundException;
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -80,7 +78,9 @@ public class UserServiceImp implements UserService , UserDetailsService {
 
     @Override
     public List<User> getUsersById(List<Long> users_ids) {
-        return (List<User>) userDao.findAllById(users_ids);
+        ArrayList<User> users = new ArrayList<>();
+        userDao.findAllById(users_ids).iterator().forEachRemaining(users::add);
+        return users;
     }
 
     @Override

@@ -79,14 +79,19 @@ public class ServiceServImpl implements ServiceServ {
 
     @Override
     public void deleteEmployeeFromService(long service_id, long employee_id) {
-        getServiceById(service_id).getEmployees().removeIf(user -> user.getId() == employee_id);
+        Servicee servicee =getServiceById(service_id);
+        servicee.getEmployees().removeIf(user -> user.getId() == employee_id);
+        serviceDao.save(servicee);
     }
 
     @Override
-    public Servicee addEmployeeToService(long service_id, User employee) {
+    public Servicee addEmployeesToService(long service_id, List<Long> employees) {
         Servicee servicee = getServiceById(service_id);
-        servicee.getEmployees().add(employee);
-        return servicee;
+        List<User> empls = userService.getUsersById(employees);
+        List<User> newEmployees = (List<User>) servicee.getEmployees();
+        newEmployees.addAll(empls);
+        servicee.setEmployees(newEmployees);
+        return serviceDao.save(servicee);
     }
 
     @Override

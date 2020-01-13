@@ -1,6 +1,7 @@
 package com.ensa.projet.controllers;
 
 
+import com.ensa.projet.controllers.forms.AddEmployeesForm;
 import com.ensa.projet.dao.ServiceDao;
 import com.ensa.projet.metier.NotAllServiceTasksValid;
 import com.ensa.projet.metier.ServiceServ;
@@ -39,8 +40,8 @@ public class ServicesController {
     @PostMapping(value = "{service_id}/employees")
     @PreAuthorize(" @serviceServImpl.isServiceChef(#service_id,authentication.principal.id) or hasRole('ROLE_MANAGER') ")
 
-    public Servicee addEmployeeToService(@PathVariable long service_id, @RequestBody User employee){
-        return serviceServ.addEmployeeToService(service_id,employee);
+    public Servicee addEmployeeToService(@PathVariable long service_id, @RequestBody AddEmployeesForm addEmployeesForm){
+        return serviceServ.addEmployeesToService(service_id,addEmployeesForm.getEmployees_ids());
     }
 
     @PreAuthorize("hasRole('ROLE_MANAGER')")

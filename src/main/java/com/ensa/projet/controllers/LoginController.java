@@ -1,6 +1,7 @@
 package com.ensa.projet.controllers;
 
 
+import com.ensa.projet.controllers.forms.LoginForm;
 import com.ensa.projet.metier.UserService;
 import com.ensa.projet.security.JwtAuthenticationResponse;
 import com.ensa.projet.security.JwtTokenProvider;
@@ -19,7 +20,6 @@ import org.springframework.web.bind.annotation.RestController;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
-import javax.validation.constraints.NotBlank;
 
 @RestController
 @RequestMapping("/login")
@@ -47,26 +47,4 @@ public class LoginController {
         return ResponseEntity.ok(jwtAuthenticationResponse);
     }
 
-}
-class LoginForm {
-    @NotBlank
-    String username;
-    @NotBlank
-    String password;
-
-    public String getUsername() {
-        return username;
-    }
-
-    public void setUsername(String username) {
-        this.username = username;
-    }
-
-    public String getPassword() {
-        return password;
-    }
-
-    public void setPassword(String password) {
-        this.password = password;
-    }
 }
