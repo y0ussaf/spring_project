@@ -27,6 +27,15 @@ public class Task {
     @CreatedDate
     private Date startDate;
     private LocalDate estimatedEndDate;
+
+    public Notification getNotification() {
+        return notification;
+    }
+
+    public void setNotification(Notification notification) {
+        this.notification = notification;
+    }
+
     @OneToOne(mappedBy = "task")
     private Notification notification;
     private Status status;
@@ -96,14 +105,6 @@ public class Task {
 
     public void setEstimatedEndDate(LocalDate estimatedEndDate) {
         this.estimatedEndDate = estimatedEndDate;
-    }
-
-    public Notification getNotification() {
-        return notification;
-    }
-
-    public void setNotification(Notification notification) {
-        this.notification = notification;
     }
 
     public enum Status {

@@ -37,7 +37,7 @@ public class UsersController {
     @PreAuthorize("hasRole('ROLE_MANAGER')")
     @PostMapping
     public User createUser(@RequestBody  User user){
-
+        user.setPassword(passwordEncoder.encode(user.getPassword()));
         return userService.createUser(user);
     }
     @PreAuthorize("hasRole('ROLE_MANAGER') or #id == authentication.principal.id")

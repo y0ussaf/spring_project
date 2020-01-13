@@ -33,6 +33,7 @@ public class Servicee {
     @ManyToOne()
     private User chef;
     @JsonIgnore
+
     @OneToMany(cascade = {CascadeType.MERGE,CascadeType.PERSIST})
     private Collection<Task> tasks =new ArrayList<>();
     @ManyToMany
