@@ -70,14 +70,15 @@ public class ServicesController {
 
     @PreAuthorize("hasRole('ROLE_MANAGER')")
     @PostMapping
-    public Servicee createService(@RequestBody Servicee servicee) throws NotAllServiceTasksValid {
-        return serviceServ.createOrUpdateService(servicee);
+    public Servicee createService(@RequestBody Servicee servicee) {
+        return serviceServ.createService(servicee);
     }
 
     @PreAuthorize("hasRole('ROLE_MANAGER') ")
     @PutMapping("{service_id}")
     public Servicee updateService(@RequestBody Servicee servicee, @PathVariable long service_id) throws NotAllServiceTasksValid {
-        return serviceServ.createOrUpdateService(servicee);
+        servicee.setId(service_id);
+        return serviceServ.updateService(servicee);
     }
 
     @PreAuthorize("hasAnyRole('ROLE_MANAGER') ")
