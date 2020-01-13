@@ -11,6 +11,7 @@ import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
 import javax.persistence.EntityNotFoundException;
+import java.time.LocalDate;
 import java.util.List;
 import java.util.function.Consumer;
 
@@ -124,9 +125,11 @@ public class ServiceServImpl implements ServiceServ {
         getAllServices(Pageable.unpaged()).stream().forEach(new Consumer<Servicee>() {
             @Override
             public void accept(Servicee servicee) {
-                servicee.getTasks().stream().forEach(new Consumer<Task>() {
-                    @Override
-                    public void accept(Task task) {
+                servicee.getTasks().stream().forEach(task -> {
+                    LocalDate estimatedEndDate = task.getEstimatedEndDate();
+                    LocalDate localDate1 = estimatedEndDate.minusDays(15);
+                    if (LocalDate.now().isAfter(estimatedEndDate) && task.getNotification() == null){
+                        User chef = task.getService().getChef();
 
                     }
                 });

@@ -2,6 +2,7 @@ package com.ensa.projet.models;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonProperty;
 
 import javax.persistence.*;
 import java.util.ArrayList;
@@ -24,7 +25,6 @@ public class User {
     private String nom;
     private String prenom;
     private String email;
-    @JsonIgnore
     private String password;
     @JsonIgnore
     @ManyToMany(mappedBy = "chef")
@@ -41,6 +41,16 @@ public class User {
                     name = "role_id", referencedColumnName = "id"))
 
     private Collection<Role> roles;
+    @OneToMany(mappedBy = "user")
+    private Collection<Notification> notifications;
+    public Collection<Notification> getNotifications() {
+        return notifications;
+    }
+
+    public void setNotifications(Collection<Notification> notifications) {
+        this.notifications = notifications;
+    }
+
 
     public long getId() {
         return id;
@@ -97,11 +107,11 @@ public class User {
     public void setEmail(String email) {
         this.email = email;
     }
-
+    @JsonIgnore
     public String getPassword() {
         return password;
     }
-
+    @JsonProperty
     public void setPassword(String password) {
         this.password = password;
     }
