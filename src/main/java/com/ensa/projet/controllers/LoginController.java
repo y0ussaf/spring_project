@@ -16,6 +16,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import javax.servlet.http.Cookie;
+import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 import javax.validation.constraints.NotBlank;
 
@@ -29,7 +31,7 @@ public class LoginController {
     @Autowired
     JwtTokenProvider tokenProvider;
     @PostMapping
-    public ResponseEntity<?> authenticateUser(@Valid @RequestBody LoginForm loginForm){
+    public ResponseEntity<?> authenticateUser(@Valid @RequestBody LoginForm loginForm, HttpServletResponse response){
         Authentication authentication = authenticationManager.authenticate(
                         new UsernamePasswordAuthenticationToken(
                                 loginForm.getUsername(),
@@ -38,7 +40,9 @@ public class LoginController {
 
         SecurityContextHolder.getContext().setAuthentication(authentication);
         String jwt = tokenProvider.generateToken(authentication);
-        JwtAuthenticationResponse jwtAuthenticationResponse = new JwtAuthenticationResponse(jwt);
+        Cookie cookie = new Cookie("jwt",jwt);
+        response.addCookie(cookie);
+        JwtAuthenticationResponse jwtAuthenticationResponse = new JwtAuthenticationResponse();
         jwtAuthenticationResponse.setUser((UserPrincipal) authentication.getPrincipal());
         return ResponseEntity.ok(jwtAuthenticationResponse);
     }

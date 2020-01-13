@@ -7,10 +7,12 @@ import com.ensa.projet.models.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
 import javax.persistence.EntityNotFoundException;
 import java.util.List;
+import java.util.function.Consumer;
 
 @Service
 public class ServiceServImpl implements ServiceServ {
@@ -112,6 +114,19 @@ public class ServiceServImpl implements ServiceServ {
     public Page<Servicee> getAllServicesByStatus(Servicee.Status status, Pageable pageable) {
         return serviceDao.findAllByStatus(status, pageable);
     }
+    @Scheduled(cron = "0 0 12 * * ?")
+    public void notifyServiceChefs(){
+        getAllServices(Pageable.unpaged()).stream().forEach(new Consumer<Servicee>() {
+            @Override
+            public void accept(Servicee servicee) {
+                servicee.getTasks().stream().forEach(new Consumer<Task>() {
+                    @Override
+                    public void accept(Task task) {
 
+                    }
+                });
+            }
+        });
+    }
 
 }
