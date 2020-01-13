@@ -139,13 +139,14 @@ public class ServiceServImpl implements ServiceServ {
     }
     @Scheduled(cron = "0 * * * * *")
     public void notifyServiceChefs(){
-        System.out.println("hjiejdiediej");
+
         List<Notification> notifications = new ArrayList<>();
         getAllServices(Pageable.unpaged()).stream().forEach(service -> taskDao.findAllByServiceId(service.getId(),Pageable.unpaged()).forEach(task -> {
             LocalDate estimatedEndDate = task.getEstimatedEndDate();
             LocalDate localDate1 = estimatedEndDate.minusDays(15);
             if (LocalDate.now().isAfter(localDate1) && task.getNotification() == null){
                 User chef = task.getService().getChef();
+                System.out.println("hjiejdiediej");
                 Notification notification = new Notification();
                 notification.setContent("task " + task.getNum() +" is not valid yet estimated end date "+estimatedEndDate );
                 notification.setUser(chef);

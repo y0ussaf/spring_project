@@ -1,5 +1,6 @@
 package com.ensa.projet.models;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -42,6 +43,7 @@ public class User {
 
     private Collection<Role> roles;
     @OneToMany(mappedBy = "user")
+    @JsonBackReference
     private Collection<Notification> notifications;
     public Collection<Notification> getNotifications() {
         return notifications;

@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.RestController;
 import java.util.List;
 
 @RestController
-@RequestMapping("/users{user_id}/notifications")
+@RequestMapping("/users/{user_id}/notifications")
 public class NotificationsController {
     @Autowired
     NotificationDao notificationDao;

@@ -1,6 +1,8 @@
 package com.ensa.projet.models;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import org.springframework.data.annotation.CreatedDate;
 
 import javax.persistence.*;
@@ -37,6 +39,8 @@ public class Task {
     }
 
     @OneToOne(mappedBy = "task")
+    @JsonBackReference
+
     private Notification notification;
     private Status status;
     @ManyToOne

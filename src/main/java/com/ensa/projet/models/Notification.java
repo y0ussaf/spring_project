@@ -1,9 +1,8 @@
 package com.ensa.projet.models;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
-import javax.persistence.OneToOne;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+
+import javax.persistence.*;
 
 @Entity
 public class Notification {
@@ -45,8 +44,11 @@ public class Notification {
         this.user = user;
     }
 
-    @OneToOne
+    @OneToOne()
+    @JsonManagedReference()
+
     Task task;
+    @JsonManagedReference()
     @OneToOne
     User user;
 }
