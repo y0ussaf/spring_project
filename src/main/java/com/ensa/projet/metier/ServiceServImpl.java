@@ -3,34 +3,42 @@ package com.ensa.projet.metier;
 import com.ensa.projet.dao.ServiceDao;
 import com.ensa.projet.models.Servicee;
 import com.ensa.projet.models.User;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.stereotype.Service;
 
 import javax.persistence.EntityNotFoundException;
-import java.util.ArrayList;
 import java.util.List;
 
-@org.springframework.stereotype.Service
+@Service
 public class ServiceServImpl implements ServiceServ {
-    private final
+    @Autowired
     UserService userService;
-    private final ServiceDao serviceDao;
-    public ServiceServImpl(ServiceDao serviceDao, UserService userService) {
-        this.serviceDao = serviceDao;
-        this.userService = userService;
-    }
+    @Autowired
+    ServiceDao serviceDao;
+
+
 
     @Override
     public Page<Servicee> getUserServicesAsChef(long user_id, Pageable pageable) {
-        return serviceDao.findAllByChefId(user_id, pageable);
+        return serviceDao.findServicesByChefId(user_id, pageable);
     }
 
     @Override
     public Page<Servicee> getUserServicesAsEmployee(long user_id, Pageable pageable) {
-        User user = userService.getUserById(user_id);
-        List<User> userList = new ArrayList<>();
-        userList.add(user);
-        return serviceDao.findAllByEmployeesContains(userList,pageable);
+        return serviceDao.findServicesByEmployeeId(user_id,pageable);
+    }
+
+    @Override
+    public Page<User> getServiceEmployees(long service_id,Pageable pageable) {
+        return userService.getServiceEmployees(service_id,pageable);
+    }
+
+    @Override
+    public User getServiceChef(long service_id) {
+
+        return  getServiceById(service_id).getChef();
     }
 
 
@@ -41,12 +49,57 @@ public class ServiceServImpl implements ServiceServ {
     }
 
     @Override
-    public void addService(Servicee service) {
-        serviceDao.save(service);
+    public Page<Servicee> getAllServices(Pageable pageable) {
+
+        return serviceDao.findAll(pageable);
     }
 
     @Override
-    public void updateService(Servicee servicee) {
-        serviceDao.save(servicee);
+    public void deleteService(long service_id)
+    {
+        serviceDao.deleteById(service_id);
     }
+
+    @Override
+    public Servicee createOrUpdateService(Servicee servicee) {
+
+        return serviceDao.save(servicee);
+    }
+
+    @Override
+    public void deleteEmployeeFromService(long service_id, long employee_id) {
+        User employee = userService.getUserById(employee_id);
+        getServiceById(service_id).getEmployees().removeIf(user -> user.getId() == employee_id);
+    }
+
+    @Override
+    public Servicee addEmployeeToService(long service_id, User employee) {
+        Servicee servicee = getServiceById(service_id);
+        servicee.getEmployees().add(employee);
+        return servicee;
+    }
+
+    @Override
+    public Page<Servicee> searchServices(String by, String value, Pageable pageable) {
+        return serviceDao.findAllByNameContaining(value,pageable);
+    }
+
+    @Override
+    public boolean isServiceChef(long service_id, long chef_id)
+    {
+        System.out.println("im"+serviceDao.isServiceChef(service_id,chef_id));
+        return true;
+    }
+
+    @Override
+    public boolean isServiceEmployee(long service_id, long employee_id) {
+        return serviceDao.isServiceEmployee(service_id, employee_id);
+    }
+
+    @Override
+    public Page<Servicee> getAllServicesByStatus(Servicee.Status status, Pageable pageable) {
+        return serviceDao.findAllByStatus(status, pageable);
+    }
+
+
 }

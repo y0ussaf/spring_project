@@ -5,13 +5,25 @@ import com.ensa.projet.models.User;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
+ import org.springframework.data.jpa.repository.Query;
+ import org.springframework.data.repository.PagingAndSortingRepository;
+ import org.springframework.stereotype.Repository;
 
-import java.util.Collection;
+ import javax.transaction.Transactional;
+ import java.util.Collection;
 
-
-public interface ServiceDao extends JpaRepository<Servicee,Long> {
+@Repository
+@Transactional
+public interface ServiceDao extends PagingAndSortingRepository<Servicee,Long> {
+    @Query("from Servicee s join s.chef c where c.id = ?1")
+    Page<Servicee> findServicesByChefId(long chef_id, Pageable pageable);
+    @Query("from Servicee s join s.employees e where e.id = ?1")
+    Page<Servicee> findServicesByEmployeeId(long employee_id,Pageable pageable);
+    Page<Servicee> findAllByNameContaining(String name,Pageable pageable);
     Page<Servicee> findAllByStatus(Servicee.Status status, Pageable pageable);
-    Page<Servicee> findAllByChefId(long chef_id, Pageable pageable);
-    Page<Servicee> findAllByEmployeesContains(Collection<User> employees, Pageable pageable);
-
+    @Query("select  case when count(s) > 0 then true else false end  from Servicee s where s.id = ?1 and  s.chef.id = ?2")
+    boolean isServiceChef(long id, long chef_id);
+    @Query("select case when count(s) > 0 then true else false end " +
+            "from Servicee s join s.employees e where s.id = ?1 and e.id =?2")
+    boolean isServiceEmployee(long id, long employee_id);
 }

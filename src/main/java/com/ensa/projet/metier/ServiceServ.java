@@ -10,7 +10,20 @@ import java.util.List;
 public interface ServiceServ {
     Page<Servicee> getUserServicesAsChef(long user_id, Pageable pageable);
     Page<Servicee> getUserServicesAsEmployee(long user_id,Pageable pageable);
+    Page<User> getServiceEmployees(long service_id, Pageable pageable);
+    User getServiceChef(long service_id);
     Servicee getServiceById(long service_id);
-    void addService(Servicee service);
-    void updateService(Servicee servicee);
+    Page<Servicee> getAllServices(Pageable pageable);
+    void deleteService(long service_id);
+    Servicee createOrUpdateService(Servicee servicee);
+    void deleteEmployeeFromService(long service_id, long employee_id);
+    Servicee addEmployeeToService(long service_id,User employee);
+
+    Page<Servicee> searchServices(String by, String value, Pageable pageable);
+
+
+    boolean isServiceChef(long service_id, long chef_id);
+
+    boolean isServiceEmployee(long service_id, long employee_id);
+    Page<Servicee> getAllServicesByStatus(Servicee.Status status, Pageable pageable);
 }

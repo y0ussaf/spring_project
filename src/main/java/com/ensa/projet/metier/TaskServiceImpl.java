@@ -8,12 +8,16 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import javax.persistence.EntityNotFoundException;
+import java.time.LocalDate;
+import java.util.Date;
+
 @Service
 public class TaskServiceImpl implements TaskService {
-    private final
-    TaskDao taskDao;
-    private final
-    ServiceServ serviceServ;
+    final
+    private TaskDao taskDao;
+    final
+    private ServiceServ serviceServ;
 
     public TaskServiceImpl(ServiceServ serviceServ, TaskDao taskDao) {
         this.serviceServ = serviceServ;
@@ -32,19 +36,27 @@ public class TaskServiceImpl implements TaskService {
     }
 
     @Override
-    public void addTask(long service_id,Task task) {
+    public Task addTask(long service_id, Task task) {
         Servicee servicee = serviceServ.getServiceById(service_id);
         task.setService(servicee);
-        taskDao.save(task);
+        return taskDao.save(task);
     }
 
     @Override
-    public void updateTask(Task task) {
-        taskDao.save(task);
+    public Task updateTask(Task task) {
+        if (task.getStatus() == Task.Status.VALIDE){
+            task.setEndDate(new Date(System.currentTimeMillis()));
+        }
+        return taskDao.save(task);
     }
 
     @Override
     public void deleteTask(long task_id) {
+        taskDao.deleteById(task_id);
+    }
 
+    @Override
+    public Task getTaskById(long task_id) {
+        return taskDao.findById(task_id).orElseThrow(EntityNotFoundException::new);
     }
 }
