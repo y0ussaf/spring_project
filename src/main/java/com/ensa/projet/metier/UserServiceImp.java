@@ -5,6 +5,8 @@ import com.ensa.projet.dao.ServiceDao;
 import com.ensa.projet.dao.UserDao;
 import com.ensa.projet.models.User;
 import com.ensa.projet.security.UserPrincipal;
+import com.ensa.projet.utils.Helper;
+import org.springframework.beans.BeanUtils;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -39,12 +41,9 @@ public class UserServiceImp implements UserService , UserDetailsService {
         return userDao.save(user);
     }
     public User updateUser(User user){
-        if (user.getPassword() == null) {
-            user.setPassword(passwordEncoder.encode(getUserById(user.getId()).getPassword()));
-        }else {
-            user.setPassword(passwordEncoder.encode(user.getPassword()));
-        }
-        return userDao.save(user);
+        User user1 = getUserById(user.getId());
+        Helper.copyNoNullProperties(user,user1);
+        return userDao.save(user1);
     }
     public void deleteUser(long userId){
 

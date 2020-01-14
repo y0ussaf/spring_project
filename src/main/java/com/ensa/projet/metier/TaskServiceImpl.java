@@ -3,11 +3,13 @@ package com.ensa.projet.metier;
 import com.ensa.projet.dao.TaskDao;
 import com.ensa.projet.models.Servicee;
 import com.ensa.projet.models.Task;
+import com.ensa.projet.utils.Helper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
+import org.springframework.util.ObjectUtils;
 
 import javax.persistence.EntityNotFoundException;
 import java.time.LocalDate;
@@ -45,9 +47,12 @@ public class TaskServiceImpl implements TaskService {
 
     @Override
     public Task updateTask(Task task) {
-        if (task.getStatus() == Task.Status.VALIDE){
-            task.setEndDate(new Date(System.currentTimeMillis()));
-        }
+
+            Task task1 = getTaskById(task.getId());
+            if (task1.getStatus()!=Task.Status.VALIDE && task.getStatus() == Task.Status.VALIDE){
+                task1.setEndDate(new Date(System.currentTimeMillis()));
+            }
+            Helper.copyNoNullProperties(task,task1);
         return taskDao.save(task);
     }
 

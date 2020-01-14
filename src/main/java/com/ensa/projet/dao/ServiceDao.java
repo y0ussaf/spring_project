@@ -28,6 +28,6 @@ public interface ServiceDao extends PagingAndSortingRepository<Servicee,Long> {
             "from Servicee s join s.employees e where s.id = ?1 and e.id =?2")
     boolean isServiceEmployee(long id, long employee_id);
     @Query("select case when count(s) > 0 then false else true end from Servicee s join s.tasks t " +
-            "where s.id = ?1 and t.status = ?2" )
+            "where s.id = ?1 and t.status <> ?2" )
     boolean isAllServiceTasksInSameStatus(long service_id,Task.Status status);
 }

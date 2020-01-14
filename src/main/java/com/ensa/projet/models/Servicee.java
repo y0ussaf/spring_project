@@ -34,7 +34,7 @@ public class Servicee {
     private User chef;
     @JsonIgnore
 
-    @OneToMany(cascade = {CascadeType.MERGE,CascadeType.PERSIST})
+    @OneToMany(mappedBy = "service",cascade = {CascadeType.MERGE,CascadeType.PERSIST})
     private Collection<Task> tasks =new ArrayList<>();
     @ManyToMany
     @JsonIgnore

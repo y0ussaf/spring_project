@@ -67,4 +67,12 @@ public class CommentsController {
          commentService.updateComment(comment1);
          return ResponseEntity.ok(comment1);
     }
+    @DeleteMapping("/{comment_id}")
+    @PreAuthorize("hasRole('ROLE_MANAGER') " +
+            "or @serviceServImpl.isServiceChef(#service_id,authentication.principal.id)" +
+            "or @serviceServImpl.isServiceEmployee(#service_id,authentication.principal.id)" )
+    public void deleteComment(@PathVariable long comment_id){
+        commentService.deleteComment(comment_id);
+    }
+
 }

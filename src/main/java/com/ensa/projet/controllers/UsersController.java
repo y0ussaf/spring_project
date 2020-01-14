@@ -43,6 +43,7 @@ public class UsersController {
     @PreAuthorize("hasRole('ROLE_MANAGER') or #id == authentication.principal.id")
     @PutMapping("/{id}")
     public User updateUser(@RequestBody User user, @PathVariable long id){
+
         return userService.updateUser(user);
     }
     @PreAuthorize("hasRole('ROLE_MANAGER') or #id == authentication.principal.id")

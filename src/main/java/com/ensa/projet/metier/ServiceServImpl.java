@@ -7,6 +7,7 @@ import com.ensa.projet.models.Notification;
 import com.ensa.projet.models.Servicee;
 import com.ensa.projet.models.Task;
 import com.ensa.projet.models.User;
+import com.ensa.projet.utils.Helper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -78,14 +79,18 @@ public class ServiceServImpl implements ServiceServ {
 
     @Override
     public Servicee updateService(Servicee servicee) throws NotAllServiceTasksValid {
-        if ( servicee.getStatus() !=getServiceById(servicee.getId()).getStatus() && (servicee.getStatus() == Servicee.Status.VALIDE )){
+        Servicee servicee1 = getServiceById(servicee.getId());
+
+        if (servicee1.getStatus() !=Servicee.Status.VALIDE && (servicee.getStatus() == Servicee.Status.VALIDE )){
             if (isAllServiceTasksValid(servicee.getId())){
-                return serviceDao.save(servicee);
+                Helper.copyNoNullProperties(servicee,servicee1);
+                return serviceDao.save(servicee1);
             }else {
                 throw new  NotAllServiceTasksValid("no valid");
             }
         }else {
-            return serviceDao.save(servicee);
+            Helper.copyNoNullProperties(servicee,servicee1);
+            return serviceDao.save(servicee1);
         }
 
     }
@@ -114,6 +119,7 @@ public class ServiceServImpl implements ServiceServ {
 
     @Override
     public boolean isAllServiceTasksValid(long service_id) {
+        System.out.println(serviceDao.isAllServiceTasksInSameStatus(service_id, Task.Status.VALIDE));
         return serviceDao.isAllServiceTasksInSameStatus(service_id, Task.Status.VALIDE);
     }
 

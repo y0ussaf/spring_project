@@ -42,16 +42,8 @@ public class User {
                     name = "role_id", referencedColumnName = "id"))
 
     private Collection<Role> roles;
-    @OneToMany(mappedBy = "user")
-    @JsonBackReference
-    private Collection<Notification> notifications;
-    public Collection<Notification> getNotifications() {
-        return notifications;
-    }
 
-    public void setNotifications(Collection<Notification> notifications) {
-        this.notifications = notifications;
-    }
+
 
 
     public long getId() {
