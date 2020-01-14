@@ -1,5 +1,7 @@
 package com.ensa.projet.models;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
@@ -17,9 +19,10 @@ public class Comment {
     @UpdateTimestamp
     private Date updated_at;
     @ManyToOne
+    @JsonIgnore
     private Task task;
-    @OneToOne(cascade = CascadeType.ALL)
-
+    @JsonIgnore
+    @OneToOne()
     private User user;
     private Status status;
 
@@ -60,19 +63,19 @@ public class Comment {
     public void setUpdated_at(Date updated_at) {
         this.updated_at = updated_at;
     }
-
+    @JsonProperty
     public Task getTask() {
         return task;
     }
-
-    public void setTask(Task task) {
+    @JsonIgnore
+     public void setTask(Task task) {
         this.task = task;
     }
-
+    @JsonProperty
     public User getUser() {
         return user;
     }
-
+    @JsonIgnore
     public void setUser(User user) {
         this.user = user;
     }
