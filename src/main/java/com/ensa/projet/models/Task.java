@@ -27,7 +27,7 @@ public class Task {
     private String description;
     private Date endDate;
     @CreatedDate
-    private Date startDate;
+    private LocalDate startDate;
     private LocalDate estimatedEndDate;
 
     public Notification getNotification() {
@@ -69,12 +69,11 @@ public class Task {
     public void setEndDate(Date endDate) {
         this.endDate = endDate;
     }
-
-    public Date getStartDate() {
+    public LocalDate getStartDate() {
         return startDate;
     }
 
-    public void setStartDate(Date startDate) {
+    public void setStartDate(LocalDate startDate) {
         this.startDate = startDate;
     }
 

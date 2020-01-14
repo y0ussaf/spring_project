@@ -30,6 +30,7 @@ public class Initialize  implements ApplicationRunner {
     @Override
     public void run(ApplicationArguments args) throws Exception {
              Role role = new Role();
+             Random random = new Random();
             role.setName("ROLE_MANAGER");
             Role role2 = new Role();
             role2.setName("ROLE_EMPLOYEE");
@@ -61,6 +62,7 @@ public class Initialize  implements ApplicationRunner {
             ArrayList<Task> tasks = new ArrayList<>();
             for (int i = 0; i <3 ; i++) {
                 Task task = new Task(34,"task "+i,LocalDate.of(2020,2,21),i == 0? Task.Status.EN_COURS : Task.Status.EN_ATTENTE);
+                task.setStartDate(LocalDate.now().plusDays(random.nextInt(20)));
                 task.setService(servicee1);
                 taskDao.save(task);
             }
