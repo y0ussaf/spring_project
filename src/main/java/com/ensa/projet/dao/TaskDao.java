@@ -17,5 +17,5 @@ public interface TaskDao  extends PagingAndSortingRepository<Task,Long> {
      Page<Task> findAllByServiceId(long service_id, Pageable pageable);
      Page<Task> findAllByServiceIdAndStatus(long service_id, Status status,Pageable pageable);
      Task findByIdAndServiceId(long id, long service_id);
-
+     List<Task> findAllByStatus(Status status);
 }

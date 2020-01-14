@@ -103,8 +103,14 @@ public class ServicesController {
         Pageable pageable = PageRequest.of(pageNo,pageSize,Sort.by(sortBy));
         return serviceServ.searchServices(by,value,pageable);
     }
+    @PreAuthorize("hasAnyRole('ROLE_MANAGER') ")
     @GetMapping("/tasks")
     public List<Task> getAllTasks(){
         return (List<Task>) taskDao.findAll();
+    }
+    @PreAuthorize("hasAnyRole('ROLE_MANAGER') ")
+    @GetMapping(value = "/tasks",params = "status")
+    public List<Task> getAllTasksByStatus(Task.Status status){
+        return  taskDao.findAllByStatus(status);
     }
 }
