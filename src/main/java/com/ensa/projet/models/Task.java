@@ -39,8 +39,7 @@ public class Task {
     }
 
     @OneToOne(mappedBy = "task")
-    @JsonBackReference
-
+    @JsonIgnore
     private Notification notification;
     private Status status;
     @ManyToOne
