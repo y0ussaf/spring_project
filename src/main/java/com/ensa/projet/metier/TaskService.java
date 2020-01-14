@@ -13,5 +13,4 @@ public interface TaskService {
     Task updateTask(Task task);
     void deleteTask(long task_id);
     Task getTaskById(long task_id);
-
 }

@@ -1,5 +1,6 @@
 package com.ensa.projet.controllers;
 
+import com.ensa.projet.dao.TaskDao;
 import com.ensa.projet.metier.ServiceServ;
 import com.ensa.projet.metier.TaskService;
 import com.ensa.projet.models.Task;
@@ -11,6 +12,8 @@ import org.springframework.data.domain.Sort;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
 @RequestMapping("/services/{service_id}/tasks")
 public class TasksController {
@@ -18,6 +21,7 @@ public class TasksController {
     TaskService taskService;
     @Autowired
     ServiceServ serviceServ;
+
     @PreAuthorize("hasAnyRole('ROLE_MANAGER') " +
             "or @serviceServImpl.isServiceChef(#service_id,authentication.principal.id)" +
             "or @serviceServImpl.isServiceEmployee(#service_id,authentication.principal.id)" )
@@ -68,4 +72,5 @@ public class TasksController {
     public void deleteTask(@PathVariable long task_id,@PathVariable long service_id){
         taskService.deleteTask(task_id);
     }
+
 }

@@ -3,9 +3,11 @@ package com.ensa.projet.controllers;
 
 import com.ensa.projet.controllers.forms.AddEmployeesForm;
 import com.ensa.projet.dao.ServiceDao;
+import com.ensa.projet.dao.TaskDao;
 import com.ensa.projet.metier.NotAllServiceTasksValid;
 import com.ensa.projet.metier.ServiceServ;
 import com.ensa.projet.models.Servicee;
+import com.ensa.projet.models.Task;
 import com.ensa.projet.models.User;
 import com.ensa.projet.security.UserPrincipal;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,6 +28,8 @@ public class ServicesController {
     ServiceServ serviceServ;
     @Autowired
     ServiceDao serviceDao;
+    @Autowired
+    TaskDao taskDao;
     @GetMapping(value = "{service_id}/employees",params = {"pageNo","pageSize","sortBy"})
     public Page<User> getAllServiceEmployees(int pageNo, int pageSize, String sortBy, @PathVariable long service_id){
         Pageable pageable = PageRequest.of(pageNo,pageSize,Sort.by(sortBy));
@@ -98,5 +102,9 @@ public class ServicesController {
     public Page<Servicee> getUserByKeyword(String by, String value, int pageNo, int pageSize, String sortBy){
         Pageable pageable = PageRequest.of(pageNo,pageSize,Sort.by(sortBy));
         return serviceServ.searchServices(by,value,pageable);
+    }
+    @GetMapping("/tasks")
+    public List<Task> getAllTasks(){
+        return (List<Task>) taskDao.findAll();
     }
 }
